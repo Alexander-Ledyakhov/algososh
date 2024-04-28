@@ -1,0 +1,30 @@
+.sorting_menu {
+    display: flex;
+    justify-content: center;
+    gap: 52px;
+}
+
+.sorting_radioInputs {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.sorting_btns {
+    display: flex;
+    gap: 12px;
+}
+
+.sorting_btn {
+    width: 205px;
+}
+
+.sorting_chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 0;
+    margin: 48px auto 0px;
+    justify-content: center;
+    height: 368px;
+}

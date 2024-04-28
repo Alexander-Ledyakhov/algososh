@@ -1,0 +1,32 @@
+.listInput {
+    width: 204px;
+}
+
+.list {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.listBtnValue {
+    width: 175px;
+}
+
+.listBtnIndex {
+    width: 362px;
+}
+
+.listUl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 90px;
+}
+
+.listLi {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}

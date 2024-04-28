@@ -1,0 +1,19 @@
+.form {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.input {
+    width: 337px;
+}
+
+.ul {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 48px 16px;
+    margin: auto;
+    margin-top: 48px;
+    max-width: 944px;
+}

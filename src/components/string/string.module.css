@@ -1,0 +1,16 @@
+.string_solutionLayout {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.string_input {
+    width: 377px;
+}
+
+.string_string {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding-left: 0px;
+}
