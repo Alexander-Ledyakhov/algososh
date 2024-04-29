@@ -4,6 +4,8 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import './fibonacci.css'
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { delay } from "../../utils/delay";
 
 export const FibonacciPage: React.FC = () => {
   const [inputFibonacci, setInputFibonacci] = useState<number>()
@@ -31,7 +33,7 @@ export const FibonacciPage: React.FC = () => {
       setLoader(true);
       arrFibonacci.push(fib(i))
       setArrFibonacci(arr => [...arr, fib(i)])
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await delay(SHORT_DELAY_IN_MS)
     }
     setLoader(false);
   }
@@ -39,7 +41,7 @@ export const FibonacciPage: React.FC = () => {
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
      <div>
-        <form className="form" onSubmit={(evt) => submitFibonacci(evt)}>
+        <form className="form" onSubmit={submitFibonacci}>
           <Input
             onChange={(evt: ChangeEvent<HTMLInputElement>) => {
               setInputFibonacci(Number(evt.target.value))

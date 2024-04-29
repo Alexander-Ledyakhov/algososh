@@ -6,49 +6,14 @@ import { Button } from "../ui/button/button";
 import style from "./stack.module.css";
 import { ElementStates } from "../../types/element-states";
 import { Circle } from "../ui/circle/circle";
+import { stack } from "./classStack";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { delay } from "../../utils/delay";
 
-interface IStack<T> {
-  push: (item: T) => void;
-  pop: () => void;
-  peak: () => T | null;
-  reset: () => void;
-  getSize: () => number;
-  getContainer: () => T[];
-}
-
-class Stack<T> implements IStack<T> {
-  private container: T[] = [];
-
-  push = (item: T): void => {
-    this.container.push(item);
-  };
-
-  pop = (): void => {
-    this.container.pop();
-  };
-
-  peak = (): T | null => {
-    if (this.container.length === 0) {
-      return null;
-    }
-    return this.container[this.container.length - 1];
-  };
-
-  reset = (): void => {
-    this.container = [];
-  };
-
-  getSize = () => this.container.length;
-  
-  getContainer = () => this.container;
-}
-
-type TArr = {
+export type TArr = {
   letter: string
   state: ElementStates
 }
-
-const stack = new Stack<TArr>();
 
 export const StackPage: React.FC = () => {
 
@@ -66,7 +31,7 @@ export const StackPage: React.FC = () => {
     })
     setArr([...stack.getContainer()])
     setInputStack('')
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await delay(SHORT_DELAY_IN_MS)
     stack.getContainer()[stack.getSize() - 1].state = ElementStates.Default;
     setArr([...stack.getContainer()])
     setValueBtn(null)
@@ -77,7 +42,7 @@ export const StackPage: React.FC = () => {
     setLoader(true)
     setValueBtn('remove')
     stack.getContainer()[stack.getSize() - 1].state = ElementStates.Changing
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await delay(SHORT_DELAY_IN_MS)
     stack.pop();
     setArr([...stack.getContainer()])
     setValueBtn(null)
@@ -90,7 +55,7 @@ export const StackPage: React.FC = () => {
     for (let index = 0; index < stack.getSize(); index++) {
       stack.getContainer()[index].state = ElementStates.Changing
     }
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await delay(SHORT_DELAY_IN_MS)
     stack.reset(); 
     setArr([...stack.getContainer()])
     setValueBtn(null)

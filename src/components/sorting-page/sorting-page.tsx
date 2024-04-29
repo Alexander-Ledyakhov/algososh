@@ -6,6 +6,8 @@ import { Column } from "../ui/column/column";
 import style from "./sorting.module.css";
 import { ElementStates } from "../../types/element-states";
 import { Direction } from "../../types/direction";
+import { DELAY_IN_MS } from "../../constants/delays";
+import { delay } from "../../utils/delay";
 
 type TArr = {
   index: number
@@ -49,7 +51,7 @@ export const SortingPage: React.FC = () => {
         arr[k].state = ElementStates.Changing;
         arr[i].state = ElementStates.Changing;
         setArr([...arr])
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await delay(DELAY_IN_MS)
         if (sortBy === 'ASC' && arr[k].index < arr[maxIndex].index) {
           maxIndex = k
         }
@@ -73,7 +75,7 @@ export const SortingPage: React.FC = () => {
         arr[k].state = ElementStates.Changing;
         arr[k + 1].state = ElementStates.Changing;
         setArr([...arr])
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await delay(DELAY_IN_MS)
         if (sortBy === 'ASC' && arr[k].index > arr[k + 1].index) {
           swap(arr, k, k + 1)
         }

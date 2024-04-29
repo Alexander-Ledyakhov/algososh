@@ -7,11 +7,11 @@ import { StringComponent } from "../string/string";
 import { SortingPage } from "../sorting-page/sorting-page";
 import { StackPage } from "../stack-page/stack-page";
 
-import "./app.css";
+import style from "./app.module.css"
 
 function App() {
   return (
-    <div className="app">
+    <div className={style.app}>
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/recursion" element={<StringComponent />} />

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -6,160 +6,14 @@ import style from "./list-page.module.css";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
+import {LinkedList} from "./classList"
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { delay } from "../../utils/delay";
 
 type TArr = {
   letter: string;
   state: ElementStates;
 };
-
-class Node<T> {
-  letter: T
-  next: Node<T> | null
-  constructor(letter: T, next?: Node<T> | null) {
-    this.letter = letter;
-    this.next = (next === undefined ? null : next);
-  }
-}
-
-interface ILinkedList<T> {
-  prepend: (element: T) => void;
-  append: (element: T) => void;
-  removeHead: () => void;
-  insertAt: (element: T, index: number) => void;
-  removeAt: (index: number) => void;
-  removeTail: () => void;
-  showValues: () => T[];
-  isEmpty: () => boolean;
-}
-
-class LinkedList<T> implements ILinkedList<T> {
-  private head: Node<T> | null;
-  private size: number;
-  constructor(elements?: T[]) {
-    this.head = null;
-    this.size = 0;
-
-    if (elements?.length) {
-      elements.forEach(el => this.append(el));
-    }
-  }
-
-  prepend(element: T) {
-    const node = new Node(element);
-    
-    if (this.head === null) {
-      this.head = node;
-    } else {
-      node.next = this.head;
-      this.head = node;
-    }
-
-    this.size++;
-  }
-
-  append(element: T) {
-    const node = new Node(element);
-    let current;
-
-    if (this.head === null) {
-      this.head = node;
-    } else {
-      current = this.head;
-      while (current.next) {
-        current = current.next;
-      }
-
-      current.next = node;
-    }
-    this.size++;
-  }
-
-  insertAt(element: T, index: number) {
-    if (index < 0 || index > this.size) {
-      throw new Error("Enter a valid index");
-    } else {
-      const node = new Node(element);
-
-      if (index === 0) {
-        node.next = this.head;
-        this.head = node;
-      } else if (this.head && this.head.next) {
-        let current = this.head;
-        let currentIndex = 0;
-
-        while (currentIndex < index -1) {
-          current = this.head.next;
-          currentIndex++;
-        }
-        node.next = current.next;
-        current.next = node;
-      }
-      this.size++;
-    }
-  }
-
-  removeHead() {
-    if (this.isEmpty()) {
-      throw new Error("Index is empty");
-    } 
-    if (this.head && this.head.next) {
-      this.head = this.head.next;
-    } else this.head = null;
-    this.size--;
-  }
-
-  removeTail() {
-    if (this.isEmpty()) {
-      throw new Error("Index is empty");
-    }
-    if (this.head && this.head.next) {
-      let current = this.head;
-      while (current.next && current.next.next) {
-        current = current.next;
-      }
-      current.next = null;
-    } else this.head = null;
-    this.size--;
-  }
-
-  removeAt(index: number): void {
-    if (this.isEmpty()) {
-      throw new Error("Index is empty");
-    }
-    if (index < 0) {
-      throw new Error("Enter a valid index");
-    }
-    if (index === 0) {
-      this.removeHead();
-    } else {
-      let prev = null;
-      let current = this.head;
-      let currentIndex = 0;
-      while (currentIndex < index) {
-        prev = current;
-        current = current!.next;
-        currentIndex++;
-      }
-      prev!.next = current!.next;
-    }
-    this.size--;
-  }
-
-  showValues(): T[] {
-    let res = [];
-    let current: Node<T> | null = this.head;
-    while (current !== null) {
-      res.push(current.letter);
-      current = current.next;
-    }
-    return res;
-  }
-
-  isEmpty(): boolean {
-    return this.head === null;
-  };
-
-}
 
 export const ListPage: React.FC = () => {
 
@@ -187,13 +41,13 @@ export const ListPage: React.FC = () => {
     setValueBtn('addHead')
     setIndexAddItem(0)
 
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await delay(SHORT_DELAY_IN_MS)
     setIndexAddItem(null)
     list.prepend({ letter: valueInputList, state: ElementStates.Modified})
     setArr([...list.showValues()])
     setValueInputList('')
 
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await delay(SHORT_DELAY_IN_MS)
     list.showValues()[0].state = ElementStates.Default
 
     setValueBtn(null)
@@ -206,13 +60,13 @@ export const ListPage: React.FC = () => {
     setValueBtn('addTail')
     setIndexAddItem(arr.length - 1)
 
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await delay(SHORT_DELAY_IN_MS)
     setIndexAddItem(null)
     list.append({ letter: valueInputList, state: ElementStates.Modified})
     setArr([...list.showValues()])
     setValueInputList('')
 
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await delay(SHORT_DELAY_IN_MS)
     list.showValues()[arr.length].state = ElementStates.Default
 
     setValueBtn(null)
@@ -227,7 +81,7 @@ export const ListPage: React.FC = () => {
 
     for (let i = 0; i <= index; i++) {
       setIndexAddItem(i)
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await delay(SHORT_DELAY_IN_MS)
       list.showValues()[i].state = ElementStates.Changing
     }
     setIndexAddItem(null)
@@ -239,7 +93,7 @@ export const ListPage: React.FC = () => {
     setArr([...list.showValues()])
 
     list.showValues()[index].state = ElementStates.Modified
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await delay(SHORT_DELAY_IN_MS)
     list.showValues()[index].state = ElementStates.Default
 
     setValueInputList('')
@@ -253,7 +107,7 @@ export const ListPage: React.FC = () => {
     setLoader(true);
     setValueBtn('removeHead')
     setIndexAddItemBottom(0)
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await delay(SHORT_DELAY_IN_MS)
     setIndexAddItemBottom(null)
     list.removeHead();
     setArr([...list.showValues()])
@@ -266,7 +120,7 @@ export const ListPage: React.FC = () => {
     setLoader(true);
     setValueBtn('removeTail')
     setIndexAddItemBottom(arr.length - 1)
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS)
     setIndexAddItemBottom(null)
     list.removeTail();
     setArr([...list.showValues()])
@@ -282,12 +136,12 @@ export const ListPage: React.FC = () => {
     for (let i = 0; i <= index; i++) {
       list.showValues()[i].state = ElementStates.Changing      
       setArr([...list.showValues()])
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await delay(SHORT_DELAY_IN_MS)
       if (i === index) {
         setIndexAddItemBottom(i)
         list.showValues()[i].state = ElementStates.Default
         setArr([...list.showValues()])
-        await new Promise(resolve => setTimeout(resolve, 500))
+        await delay(SHORT_DELAY_IN_MS)
       }
     }
     setIndexAddItemBottom(null)
@@ -357,14 +211,14 @@ export const ListPage: React.FC = () => {
           text="Добавить по индексу" 
           onClick={addIndex}
           isLoader={loader && valueBtn === 'addIndex'}
-          disabled={valueInputList === '' || valueInputIndex === ''} 
+          disabled={valueInputList === '' || valueInputIndex === '' || list.getSize() < Number(valueInputIndex)} 
           />
         <Button 
           extraClass={style.listBtnIndex} 
           text="Удалить по индексу" 
           onClick={removeIndex}
           isLoader={loader && valueBtn === 'removeIndex'}
-          disabled={list.isEmpty() || valueInputIndex === ''}
+          disabled={list.isEmpty() || valueInputIndex === '' || list.getSize() < Number(valueInputIndex)}
           />
       </div>
       <div>

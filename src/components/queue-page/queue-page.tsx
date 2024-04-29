@@ -5,65 +5,14 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
+import { Queue } from "./classQueue";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { delay } from "../../utils/delay";
 
 type TArr = {
   letter: string;
   state: ElementStates;
 };
-
-interface IQueue<T> {
-  enqueue: (item: T) => void;
-  dequeue: (item: T) => void;
-  reset: () => void;
-  getContainer: () => (T | null)[] | null;
-  isEmpty: () => boolean;
-  getTail: () => void;
-  getHead: () => void;
-  getSize: () => number;
-}
-
-class Queue<T> implements IQueue<T> {
-  private container: T[] = [];
-  private head: number = 0;
-  private tail: number = 0;
-  private length: number = 0;
-  readonly size: number;
-
-  constructor(size: number) {
-    this.size = size;
-    this.container = Array(size).fill("");
-  }
-
-  enqueue(item: T) {
-    if (this.tail < this.size) {
-      this.container[this.tail % this.size] = item;
-      if (this.head === 0) this.head = 1;
-      this.tail++;
-      this.length++;
-    }
-  }
-
-  dequeue(item: T) {
-    this.container[this.head - 1] = item;
-    (this.head < this.size) && this.head++;
-    this.length--;
-  }
-  reset() {
-    this.container = Array(this.size).fill({
-      letter: '',
-      state: ElementStates.Default
-    });
-    this.tail = 0;
-    this.length = 0;
-    this.head = 0;
-  }
-
-  getContainer = () => this.container;
-  isEmpty = () => this.length === 0;
-  getTail = () => this.tail
-  getHead = () => this.head;
-  getSize = () => this.size;
-}
 
 export const QueuePage: React.FC = () => {
 
@@ -81,7 +30,7 @@ export const QueuePage: React.FC = () => {
         state: ElementStates.Changing
       })
       setQueue(queue)
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await delay(SHORT_DELAY_IN_MS)
       queue.getContainer()[queue.getTail() - 1].state = ElementStates.Default
     }
     setValueInputQueue("")
@@ -93,7 +42,7 @@ export const QueuePage: React.FC = () => {
     setLoader(true);
     setValueBtn('remove')
     queue.getContainer()[queue.getHead() - 1].state = ElementStates.Changing;
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS)
     queue.dequeue({
       letter: '',
       state: ElementStates.Default
@@ -109,7 +58,7 @@ export const QueuePage: React.FC = () => {
     for (let index = 0; index < queue.getTail(); index++) {
       queue.getContainer()[index].state = ElementStates.Changing;
     }
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await delay(SHORT_DELAY_IN_MS)
     queue.reset();
     setQueue(queue);
     setValueBtn(null)
