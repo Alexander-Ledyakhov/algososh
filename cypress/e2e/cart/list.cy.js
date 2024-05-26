@@ -1,8 +1,6 @@
-import data from '../../fixtures/example.json'
-
 describe("list page works correctly", () => {
 
-  beforeEach(() => cy.visit(`${data.baseUrl}/list`))
+  beforeEach(() => cy.visit(`/list`))
   
   it('Кнопки добавления и кнопка удаления по индексу недоступны, если инпут пуст', () => {
     cy.get('input').eq(0).should('have.value', '')

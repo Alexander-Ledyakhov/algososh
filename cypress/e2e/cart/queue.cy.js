@@ -1,8 +1,6 @@
-import data from '../../fixtures/example.json'
-
 describe("queue page works correctly", () => {
 
-  beforeEach(() => cy.visit(`${data.baseUrl}/queue`))
+  beforeEach(() => cy.visit(`/queue`))
   
   it('Кнопка добавления недоступна, если инпут пуст', () => {
     cy.get('input').should('have.value', '')

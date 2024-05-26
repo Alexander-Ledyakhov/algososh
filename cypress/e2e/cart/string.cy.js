@@ -1,8 +1,6 @@
-import data from '../../fixtures/example.json'
-
 describe("string page works correctly", () => {
 
-  beforeEach(() => cy.visit(`${data.baseUrl}/recursion`))
+  beforeEach(() => cy.visit(`/recursion`))
   
   it('Кнопка добавления недоступна, если инпут пуст', () => {
     cy.get('input').should('have.value', '')

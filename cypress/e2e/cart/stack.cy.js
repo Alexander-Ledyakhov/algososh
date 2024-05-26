@@ -1,8 +1,6 @@
-import data from '../../fixtures/example.json'
-
 describe("stack page works correctly", () => {
 
-  beforeEach(() => cy.visit(`${data.baseUrl}/stack`))
+  beforeEach(() => cy.visit(`/stack`))
   
   it('Кнопка добавления недоступна, если инпут пуст', () => {
     cy.get('input').should('have.value', '')
