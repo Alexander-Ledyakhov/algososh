@@ -11,6 +11,12 @@ type TArr = {
   state: ElementStates
 }[]
 
+export const reverse = (inputStringComponent: string) => {
+  const inputStringArr = inputStringComponent.split('')
+  const reverseObj = inputStringArr.map((letter => ({ letter: letter, state: ElementStates.Default })))
+  return reverseObj.reverse()
+}
+
 export const StringComponent: React.FC = () => {
 
   const [inputStringComponent, setInputStringComponent] = useState<string>('')
@@ -58,6 +64,7 @@ export const StringComponent: React.FC = () => {
     reverseObj[endIndexArr].state = ElementStates.Changing
     setArr(reverseObj.reverse())
     await changeColorArr(startIndexArr, endIndexArr)
+    reverse(inputStringComponent)
     setLoader(false)
   };
   

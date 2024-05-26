@@ -14,6 +14,72 @@ type TArr = {
   state: ElementStates
 }[]
 
+const swap = (arr: TArr, firstIndex: number, secondIndex: number): void => {
+  const temp = arr[firstIndex];
+  arr[firstIndex] = arr[secondIndex];
+  arr[secondIndex] = temp;
+}
+
+export const selectionSort = async (arr: TArr, sortBy: 'ASC' | 'DESC', setArr: (value: React.SetStateAction<TArr>) => void) => {
+  const { length } = arr
+  for (let i = 0; i < length; i++) {
+    let maxIndex = i;
+    for (let k = i + 1; k < length; k++) {
+      arr[k].state = ElementStates.Changing;
+      arr[i].state = ElementStates.Changing;
+      setArr([...arr])
+      await delay(DELAY_IN_MS)
+      if (sortBy === 'ASC' && arr[k].index < arr[maxIndex].index) {
+        maxIndex = k
+      }
+      if (sortBy === 'DESC' && arr[k].index > arr[maxIndex].index) {
+        maxIndex = k
+      }
+      arr[k].state = ElementStates.Default;
+      arr[i].state = ElementStates.Default;
+      setArr([...arr])
+    }
+    if (maxIndex !== i) swap(arr, maxIndex, i);
+    arr[i].state = ElementStates.Modified;
+    setArr([...arr])
+  }
+
+  const arrForTest = []
+  for (let index = 0; index < arr.length; index++) {
+    arrForTest.push(arr[index].index)    
+  }
+  return arrForTest
+}
+
+export const bubbleSort = async (arr: TArr, sortBy: 'ASC' | 'DESC', setArr: (value: React.SetStateAction<TArr>) => void) => {
+  const { length } = arr;
+  for (let i = 0; i < length; i++) {
+    for (let k = 0; k < length - i - 1; k++) {
+      arr[k].state = ElementStates.Changing;
+      arr[k + 1].state = ElementStates.Changing;
+      setArr([...arr])
+      await delay(DELAY_IN_MS)
+      if (sortBy === 'ASC' && arr[k].index > arr[k + 1].index) {
+        swap(arr, k, k + 1)
+      }
+      if (sortBy === 'DESC' && arr[k].index < arr[k + 1].index) {
+        swap(arr, k, k + 1)
+      }
+      arr[k].state = ElementStates.Default;
+      arr[k + 1].state = ElementStates.Modified;
+      setArr([...arr])
+    }
+    arr[length - 1 - i].state = ElementStates.Modified;
+    setArr([...arr])
+  }
+
+  const arrForTest = []
+  for (let index = 0; index < arr.length; index++) {
+    arrForTest.push(arr[index].index)    
+  }
+  return arrForTest
+}
+
 export const SortingPage: React.FC = () => {
 
   const [arr, setArr] = useState<TArr>([]);
@@ -37,60 +103,6 @@ export const SortingPage: React.FC = () => {
     setArr(arr)
   }
 
-  const swap = (arr: TArr, firstIndex: number, secondIndex: number): void => {
-    const temp = arr[firstIndex];
-    arr[firstIndex] = arr[secondIndex];
-    arr[secondIndex] = temp;
-  }
-
-  const selectionSort = async (arr: TArr, sortBy: 'ASC' | 'DESC') => {
-    const { length } = arr
-    for (let i = 0; i < length; i++) {
-      let maxIndex = i;
-      for (let k = i + 1; k < length; k++) {
-        arr[k].state = ElementStates.Changing;
-        arr[i].state = ElementStates.Changing;
-        setArr([...arr])
-        await delay(DELAY_IN_MS)
-        if (sortBy === 'ASC' && arr[k].index < arr[maxIndex].index) {
-          maxIndex = k
-        }
-        if (sortBy === 'DESC' && arr[k].index > arr[maxIndex].index) {
-          maxIndex = k
-        }
-        arr[k].state = ElementStates.Default;
-        arr[i].state = ElementStates.Default;
-        setArr([...arr])
-      }
-      if (maxIndex !== i) swap(arr, maxIndex, i);
-      arr[i].state = ElementStates.Modified;
-      setArr([...arr])
-    }
-  }
-
-  const bubbleSort = async (arr: TArr, sortBy: 'ASC' | 'DESC') => {
-    const { length } = arr;
-    for (let i = 0; i < length; i++) {
-      for (let k = 0; k < length - i - 1; k++) {
-        arr[k].state = ElementStates.Changing;
-        arr[k + 1].state = ElementStates.Changing;
-        setArr([...arr])
-        await delay(DELAY_IN_MS)
-        if (sortBy === 'ASC' && arr[k].index > arr[k + 1].index) {
-          swap(arr, k, k + 1)
-        }
-        if (sortBy === 'DESC' && arr[k].index < arr[k + 1].index) {
-          swap(arr, k, k + 1)
-        }
-        arr[k].state = ElementStates.Default;
-        arr[k + 1].state = ElementStates.Modified;
-        setArr([...arr])
-      }
-      arr[length - 1 - i].state = ElementStates.Modified;
-      setArr([...arr])
-    }
-  }
-
   const sort = async (sortBy: 'ASC' | 'DESC') => {
     setLoader({
       value: true,
@@ -98,10 +110,10 @@ export const SortingPage: React.FC = () => {
     });
     switch(valueRadioInput) {
       case 'choice':
-        await selectionSort(arr, sortBy);
+        await selectionSort(arr, sortBy, setArr);
         break;
       case 'bubble':
-        await bubbleSort(arr, sortBy)
+        await bubbleSort(arr, sortBy, setArr)
         break;
     }
     setLoader({
