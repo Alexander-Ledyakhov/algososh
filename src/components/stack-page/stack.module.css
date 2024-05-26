@@ -1,0 +1,21 @@
+.stack_container{
+    display: flex;
+    justify-content: center;
+}
+
+.stack_menu {
+    display: flex;
+    gap: 12px;
+}
+
+
+.stack_input {
+    width: 377px;
+}
+
+.stack_arr {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 48px;
+}

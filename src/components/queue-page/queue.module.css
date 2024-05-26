@@ -1,0 +1,21 @@
+.queue_container{
+    display: flex;
+    justify-content: center;
+}
+
+.queue_menu {
+    display: flex;
+    gap: 12px;
+}
+
+
+.queue_input {
+    width: 377px;
+}
+
+.queue_arr {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 48px;
+}
